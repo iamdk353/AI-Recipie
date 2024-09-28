@@ -1,8 +1,12 @@
 import { useEffect, useRef, useState } from "react";
 import { GoogleGenerativeAI } from "@google/generative-ai";
 import LoderIcon from "./LoderIcon";
-
+const ApiKey = import.meta.env.VITE_AI_API;
 const Chat = ({ Req }: { Req: string; Res?: string }) => {
+  if (!ApiKey) {
+    throw new Error("no api key");
+    return;
+  }
   const [res, setRes] = useState("");
   const messagesEndRef = useRef<HTMLDivElement | null>(null);
   const [loading, setLoading] = useState(true);
@@ -11,9 +15,7 @@ const Chat = ({ Req }: { Req: string; Res?: string }) => {
   };
   useEffect(() => {
     async function getResponse(req?: string) {
-      const genAI = new GoogleGenerativeAI(
-        "AIzaSyD9-sAONRfbMmtaxcG4cttiyPgo9NVmrnM"
-      );
+      const genAI = new GoogleGenerativeAI(ApiKey as string);
       const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
       if (req) {
         console.log(req);
