@@ -20,7 +20,7 @@ const AIresponse = ({ search, people, isVeg, setSearch }: query) => {
           {chat?.length === undefined && (
             <div className="w-full  h-full flex justify-center items-center flex-col">
               <BotIcon size="size-32" />
-              <p>ASK ANY DISH I WLL PREPARE</p>
+              <p>ASK ANY DISH ...</p>
             </div>
           )}
           {chat?.map((i, id) => {
