@@ -23,7 +23,7 @@ async function getResponse(query: string, cookmode?: boolean) {
    if vegetable not provide simple give a text message saying vegetable not provided`;
   // console.log(Aiquery);
   const result = await model.generateContent(Aiquery);
-  console.log(result.response.text());
+  // console.log(result.response.text());
   return result.response
     .text()
     .replace("```json", "")

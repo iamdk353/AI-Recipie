@@ -2,6 +2,8 @@ import { useState } from "react";
 import getResponse from "./utlis";
 import { BrainCircuit, Loader } from "lucide-react";
 import ChatTab from "./ChatTab";
+import { motion } from "framer-motion";
+import { containerVariants, itemVariants } from "./Animation";
 
 const Main = () => {
   const [vegetables, setVegetables] = useState("");
@@ -13,18 +15,18 @@ const Main = () => {
   const [loadIdea, setIdeaLoad] = useState(false);
   const [chat, setChat] = useState<string[]>();
   const [limit, setLimit] = useState(5);
-  const [preparing, setPreparing] = useState(false);
+
   return (
     <div
-      className="w-full  h-full flex flex-col md:flex-row flex-1 "
+      className="w-full  h-full flex flex-col md:flex-row flex-1 p-4"
       id="prompt"
     >
       <form
-        className="md:w-[60rem] md:h-[90%] w-full  bg-base-300 form-control items-center overflow-y-hidden"
+        className="md:w-[60rem] md:h-[90%] w-full  bg-base-300 form-control items-center  px-0.5 py-2 md:p-4"
         onSubmit={async (e) => {
           setIdeaLoad(true);
           e.preventDefault();
-          console.log(prompt);
+          // console.log(prompt);
           const resp = await getResponse(prompt as string);
           setIdeas(JSON.parse(resp));
           setIdeaLoad(false);
@@ -164,13 +166,19 @@ const Main = () => {
         </div>
 
         {ideas != undefined && (
-          <div className="w-full md:grid md:grid-cols-2 p-2 md:gap-2 space-y-2 md:space-y-0 overflow-y-scroll">
+          <motion.div
+            className="w-full md:grid md:grid-cols-2 p-2 md:gap-2 space-y-2 md:space-y-0 overflow-y-scroll"
+            variants={containerVariants}
+            initial="hidden"
+            animate="visible"
+          >
             {ideas.slice(0, limit).map((i, index) => (
-              <button
-                className="btn btn-ghost w-full bg-base-100"
+              <motion.button
+                className="btn btn-ghost w-full bg-base-200 "
                 type="button"
+                variants={itemVariants}
                 key={index}
-                disabled={preparing}
+                // disabled={preparing}
                 onClick={() => {
                   setChat((prev) => {
                     if (prev) {
@@ -182,7 +190,7 @@ const Main = () => {
                 }}
               >
                 {i.recipeName}
-              </button>
+              </motion.button>
             ))}
 
             <div className="space-x-2 flex justify-center ">
@@ -225,21 +233,28 @@ const Main = () => {
                 )}
               </button>
             </div>
-          </div>
+          </motion.div>
         )}
       </form>
       <form
         onSubmit={(e) => {
           e.preventDefault();
-          console.log(chat);
         }}
         className="w-full h-[90%]"
       >
-        <div className="flex flex-col  overflow-y-scroll bg-red-800 h-[82vh]">
+        <div className="flex flex-col  overflow-y-scroll  h-[82vh]">
           {(chat?.length as number) > 0 &&
             chat != undefined &&
             chat.map((i, id) => {
-              return <ChatTab></ChatTab>;
+              // console.log(chat.length - 1 === id);
+              return (
+                <ChatTab
+                  query={i}
+                  cookMode={true}
+                  last={chat.length - 1 === id}
+                  key={id}
+                ></ChatTab>
+              );
             })}
         </div>
       </form>
