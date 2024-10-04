@@ -1,6 +1,6 @@
 import { useState } from "react";
 import getResponse from "./utlis";
-import { BrainCircuit, Loader, Vegan } from "lucide-react";
+import { BrainCircuit, Loader} from "lucide-react";
 import ChatTab from "./ChatTab";
 import { motion } from "framer-motion";
 import { containerVariants, itemVariants } from "./Animation";
