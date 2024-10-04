@@ -1,7 +1,6 @@
 import Nav from "./Nav";
 import Main from "./Main";
 import { useEffect, useState } from "react";
-import NoInternet from "./NoInternet";
 
 const Chat = () => {
   const [isOnline, setIsOnline] = useState(navigator.onLine);
