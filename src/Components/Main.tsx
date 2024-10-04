@@ -1,12 +1,13 @@
 import { useState } from "react";
 import getResponse from "./utlis";
-import { BrainCircuit, Loader } from "lucide-react";
+import { BrainCircuit, Loader, Vegan } from "lucide-react";
 import ChatTab from "./ChatTab";
 import { motion } from "framer-motion";
 import { containerVariants, itemVariants } from "./Animation";
 import toast from "react-hot-toast";
+import NoInternet from "./NoInternet";
 
-const Main = () => {
+const Main = ({ Online }: { Online: boolean }) => {
   const [vegetables, setVegetables] = useState("");
   const [veg, setVeg] = useState(false);
   const [prompt, setPrompt] = useState<string>();
@@ -16,6 +17,7 @@ const Main = () => {
   const [loadIdea, setIdeaLoad] = useState(false);
   const [chat, setChat] = useState<string[]>();
   const [limit, setLimit] = useState(5);
+  const [submit, setSubmit] = useState(false);
 
   return (
     <>
@@ -24,26 +26,39 @@ const Main = () => {
         id="prompt"
       >
         <form
-          className="md:w-[60rem] md:h-[90%] w-full  bg-base-300 form-control items-center  px-0.5 py-2 md:p-4"
+          className="md:w-[60rem] md:h-[90%] w-full  bg-base-300 form-control items-center  px-0.5 py-2 md:p-4 relative"
           onSubmit={async (e) => {
             setIdeaLoad(true);
             e.preventDefault();
-            // console.log(prompt);
 
             const resp = await getResponse(prompt as string);
-            setIdeas(JSON.parse(resp));
-            setIdeaLoad(false);
-            toast.success("Ideas Generated");
+            try {
+              setIdeas(JSON.parse(resp));
+              setIdeaLoad(false);
+              toast.success("Ideas Generated");
+            } catch (error) {
+              toast.error("provide correct query");
+              setIdeaLoad(false);
+              setIdeas(undefined);
+              setVegetables("");
+            }
           }}
         >
+          {!Online && <NoInternet />}
           <div className="flex w-[90%]">
             <input
               type="text"
               required
               placeholder="vegetables"
+              value={vegetables}
               className="input input-bordered w-full max-w-[80%] bg-base-100"
               onChange={(e) => {
-                setVegetables(e.target.value.trim().split(" ").join(","));
+                if (e.target.value.length > 0) {
+                  setSubmit(true);
+                } else {
+                  setSubmit(false);
+                }
+                setVegetables(e.target.value.split(" ").join(",").trimEnd());
               }}
             />
             <button
@@ -62,8 +77,9 @@ const Main = () => {
                     time === 0 ? "breakfast" : time === 1 ? "lunch" : "dinner"
                   } using ${vegetables}`
                 );
+                // setSubmit(false);
               }}
-              disabled={!(vegetables.length > 0)}
+              disabled={!submit}
             >
               {loadIdea ? (
                 <Loader className="animate-spin"></Loader>

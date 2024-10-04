@@ -22,7 +22,7 @@ const Chat = () => {
   return (
     <div data-theme="dark" className="flex flex-col md:h-screen min-h-screen ">
       <Nav />
-      {isOnline ? <Main /> : <NoInternet />}
+      <Main Online={isOnline} />
     </div>
   );
 };
