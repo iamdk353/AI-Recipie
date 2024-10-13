@@ -1,11 +1,12 @@
 import { useState } from "react";
 import getResponse from "./utlis";
-import { BrainCircuit, Loader} from "lucide-react";
+import { BrainCircuit, Loader } from "lucide-react";
 import ChatTab from "./ChatTab";
 import { motion } from "framer-motion";
 import { containerVariants, itemVariants } from "./Animation";
 import toast from "react-hot-toast";
 import NoInternet from "./NoInternet";
+import AnimeLoad from "./AnimeLoad";
 
 const Main = ({ Online }: { Online: boolean }) => {
   const [vegetables, setVegetables] = useState("");
@@ -18,7 +19,6 @@ const Main = ({ Online }: { Online: boolean }) => {
   const [chat, setChat] = useState<string[]>();
   const [limit, setLimit] = useState(5);
   const [submit, setSubmit] = useState(false);
-
   return (
     <>
       <div
@@ -35,12 +35,14 @@ const Main = ({ Online }: { Online: boolean }) => {
             try {
               setIdeas(JSON.parse(resp));
               setIdeaLoad(false);
+              setSubmit(false);
               toast.success("Ideas Generated");
             } catch (error) {
               toast.error("provide correct query");
               setIdeaLoad(false);
               setIdeas(undefined);
               setVegetables("");
+              setSubmit(false);
             }
           }}
         >
@@ -53,12 +55,12 @@ const Main = ({ Online }: { Online: boolean }) => {
               value={vegetables}
               className="input input-bordered w-full max-w-[80%] bg-base-100"
               onChange={(e) => {
-                if (e.target.value.length > 0) {
+                setVegetables(e.target.value.split(" ").join(",").trimEnd());
+                if (vegetables.split(",").length >= 3) {
                   setSubmit(true);
                 } else {
                   setSubmit(false);
                 }
-                setVegetables(e.target.value.split(" ").join(",").trimEnd());
               }}
             />
             <button
@@ -77,7 +79,6 @@ const Main = ({ Online }: { Online: boolean }) => {
                     time === 0 ? "breakfast" : time === 1 ? "lunch" : "dinner"
                   } using ${vegetables}`
                 );
-                // setSubmit(false);
               }}
               disabled={!submit}
             >
@@ -88,109 +89,128 @@ const Main = ({ Online }: { Online: boolean }) => {
               )}
             </button>
           </div>
-          <div className="flex space-x-2 flex-wrap justify-center items-center bg-base-200 p-2 m-2 rounded-sm w-[95%]">
-            <label className="label cursor-pointer space-x-2">
-              <span className="label-text">VEG</span>
-              <input
-                type="radio"
-                name="radio-1"
-                className="radio"
-                onChange={() => {
-                  setVeg(true);
-                }}
-              />
-            </label>
-            <label className="label cursor-pointer space-x-2">
-              <span className="label-text">NON VEG</span>
-              <input
-                type="radio"
-                name="radio-1"
-                className="radio"
-                onChange={() => {
-                  setVeg(false);
-                }}
-                defaultChecked
-              />
-            </label>
-          </div>
+          <div
+            className={
+              !vegetables
+                ? "flex space-x-2 flex-wrap justify-center items-center bg-base-200 p-2 m-2 rounded-sm w-[95%] opacity-25 pointer-events-none"
+                : "flex space-x-2 flex-wrap justify-center items-center bg-base-200  p-2 m-2 rounded-sm w-[95]"
+            }
+          >
+            <div
+              className={
+                "flex space-x-2 flex-wrap justify-center items-center bg-base-200 p-2 m-2 rounded-sm w-[95%]"
+              }
+            >
+              <label className="label cursor-pointer space-x-2">
+                <span className="label-text">VEG</span>
+                <input
+                  type="radio"
+                  name="radio-1"
+                  className="radio"
+                  onChange={() => {
+                    setVeg(true);
+                    setSubmit(true);
+                  }}
+                />
+              </label>
+              <label className="label cursor-pointer space-x-2">
+                <span className="label-text">NON VEG</span>
+                <input
+                  type="radio"
+                  name="radio-1"
+                  className="radio"
+                  onChange={() => {
+                    setVeg(false);
+                    setSubmit(true);
+                  }}
+                  defaultChecked
+                />
+              </label>
+            </div>
 
-          <div className="flex space-x-2 flex-wrap justify-center items-center bg-base-200 p-2 m-2 rounded-sm w-[95%]">
-            <label className="label cursor-pointer space-x-2">
-              <span className="label-text">BREAK FAST</span>
-              <input
-                type="radio"
-                name="radio-2"
-                className="radio"
-                checked={time === 0}
-                onChange={(_e) => {
-                  setTime(0);
-                }}
-              />
-            </label>
-            <label className="label cursor-pointer space-x-2">
-              <span className="label-text">LUNCH</span>
-              <input
-                type="radio"
-                name="radio-2"
-                className="radio"
-                checked={time === 1}
-                onChange={(_e) => {
-                  setTime(1);
-                }}
-              />
-            </label>
-            <label className="label cursor-pointer space-x-2">
-              <span className="label-text">DINNER</span>
-              <input
-                type="radio"
-                name="radio-2"
-                className="radio"
-                checked={time === 2}
-                onChange={(_e) => {
-                  setTime(2);
-                }}
-              />
-            </label>
+            <div className="flex space-x-2 flex-wrap justify-center items-center bg-base-200 p-2 m-2 rounded-sm w-[95%]">
+              <label className="label cursor-pointer space-x-2">
+                <span className="label-text">BREAK FAST</span>
+                <input
+                  type="radio"
+                  name="radio-2"
+                  className="radio"
+                  checked={time === 0}
+                  onChange={(_e) => {
+                    setTime(0);
+                    setSubmit(true);
+                  }}
+                />
+              </label>
+              <label className="label cursor-pointer space-x-2">
+                <span className="label-text">LUNCH</span>
+                <input
+                  type="radio"
+                  name="radio-2"
+                  className="radio"
+                  checked={time === 1}
+                  onChange={(_e) => {
+                    setTime(1);
+                    setSubmit(true);
+                  }}
+                />
+              </label>
+              <label className="label cursor-pointer space-x-2">
+                <span className="label-text">DINNER</span>
+                <input
+                  type="radio"
+                  name="radio-2"
+                  className="radio"
+                  checked={time === 2}
+                  onChange={(_e) => {
+                    setTime(2);
+                    setSubmit(true);
+                  }}
+                />
+              </label>
+            </div>
+            <div className="flex space-x-2 flex-wrap justify-center items-center bg-base-200 p-2 m-2 rounded-sm w-[95%]">
+              <label className="label cursor-pointer space-x-2">
+                <span className="label-text">INDIAN</span>
+                <input
+                  type="radio"
+                  name="radio-3"
+                  className="radio"
+                  checked={place === 0}
+                  onChange={(_e) => {
+                    setPlace(0);
+                    setSubmit(true);
+                  }}
+                />
+              </label>
+              <label className="label cursor-pointer space-x-2">
+                <span className="label-text">CHINEESE</span>
+                <input
+                  type="radio"
+                  name="radio-3"
+                  className="radio"
+                  checked={place === 1}
+                  onChange={(_e) => {
+                    setPlace(1);
+                    setSubmit(true);
+                  }}
+                />
+              </label>
+              <label className="label cursor-pointer space-x-2">
+                <span className="label-text">AMERICAN</span>
+                <input
+                  type="radio"
+                  name="radio-3"
+                  className="radio"
+                  checked={place === 2}
+                  onChange={(_e) => {
+                    setPlace(2);
+                    setSubmit(true);
+                  }}
+                />
+              </label>
+            </div>
           </div>
-          <div className="flex space-x-2 flex-wrap justify-center items-center bg-base-200 p-2 m-2 rounded-sm w-[95%]">
-            <label className="label cursor-pointer space-x-2">
-              <span className="label-text">INDIAN</span>
-              <input
-                type="radio"
-                name="radio-3"
-                className="radio"
-                checked={place === 0}
-                onChange={(_e) => {
-                  setPlace(0);
-                }}
-              />
-            </label>
-            <label className="label cursor-pointer space-x-2">
-              <span className="label-text">CHINEESE</span>
-              <input
-                type="radio"
-                name="radio-3"
-                className="radio"
-                checked={place === 1}
-                onChange={(_e) => {
-                  setPlace(1);
-                }}
-              />
-            </label>
-            <label className="label cursor-pointer space-x-2">
-              <span className="label-text">AMERICAN</span>
-              <input
-                type="radio"
-                name="radio-3"
-                className="radio"
-                checked={place === 2}
-                onChange={(_e) => {
-                  setPlace(2);
-                }}
-              />
-            </label>
-          </div>
-
           {ideas != undefined && (
             <motion.div
               className="w-full md:grid md:grid-cols-2 p-2 md:gap-2 space-y-2 md:space-y-0 overflow-y-scroll"
@@ -270,8 +290,9 @@ const Main = ({ Online }: { Online: boolean }) => {
           onSubmit={(e) => {
             e.preventDefault();
           }}
-          className="w-full h-[90%]"
+          className="w-full h-[90%] relative"
         >
+          <AnimeLoad />
           <div className="flex flex-col  overflow-y-scroll  h-[82vh]">
             {(chat?.length as number) > 0 &&
               chat != undefined &&
