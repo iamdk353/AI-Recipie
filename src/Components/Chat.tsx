@@ -1,4 +1,3 @@
-import Nav from "./Nav";
 import Main from "./Main";
 import { useEffect, useState } from "react";
 
@@ -19,8 +18,7 @@ const Chat = () => {
   }, [isOnline]);
 
   return (
-    <div data-theme="dark" className="flex flex-col md:h-screen min-h-screen ">
-      <Nav />
+    <div data-theme="dark" className="flex flex-col md:h-[92vh] min-h-[80vh] ">
       <Main Online={isOnline} />
     </div>
   );

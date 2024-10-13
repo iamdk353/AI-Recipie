@@ -9,7 +9,10 @@ async function getResponse(query: string, cookmode?: boolean) {
     ? `generate the recipie for ${query} 
 only html inside single div no extra text no images`
     : `${query}
-      add required items , give short names  
+      add required items , give short names  ,
+      if it is not vegetable or fruit give error message in text schema
+      text schema :
+      error = string
       JSON schema:
   Recipe = {'recipeName': string}
   Return: Array<Recipe>
