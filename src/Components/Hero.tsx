@@ -11,7 +11,7 @@ const Hero = () => {
       className="w-full md:h-[90vh] flex justify-center items-center h-screen"
       data-theme="dark"
     >
-      <div className="w-[60%] flex flex-col items-center justify-center">
+      <div className="w-[80%] md:w-[60%] flex flex-col items-center justify-center">
         <TextGenerateEffect
           words="Flavour Bot"
           className="text-[2rem] md:text-[4rem]"
