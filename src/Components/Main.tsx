@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import getResponse from "./utlis";
 import { BrainCircuit, Loader } from "lucide-react";
 import ChatTab from "./ChatTab";
@@ -19,6 +19,11 @@ const Main = ({ Online }: { Online: boolean }) => {
   const [chat, setChat] = useState<string[]>();
   const [limit, setLimit] = useState(5);
   const [submit, setSubmit] = useState(false);
+  useEffect(() => {
+    if (!Online) {
+      toast.error("No network");
+    }
+  }, [Online]);
   return (
     <>
       <div
@@ -31,8 +36,8 @@ const Main = ({ Online }: { Online: boolean }) => {
             setIdeaLoad(true);
             e.preventDefault();
 
-            const resp = await getResponse(prompt as string);
             try {
+              const resp = await getResponse(prompt as string);
               setIdeas(JSON.parse(resp));
               setIdeaLoad(false);
               setSubmit(false);
@@ -91,7 +96,7 @@ const Main = ({ Online }: { Online: boolean }) => {
           </div>
           <div
             className={
-              !vegetables
+              vegetables.split(",").length < 3
                 ? "flex space-x-2 flex-wrap justify-center items-center bg-base-200 p-2 m-2 rounded-sm w-[95%] opacity-25 pointer-events-none"
                 : "flex space-x-2 flex-wrap justify-center items-center bg-base-200  p-2 m-2 rounded-sm w-[95]"
             }
@@ -292,7 +297,7 @@ const Main = ({ Online }: { Online: boolean }) => {
           }}
           className="w-full h-[90%] relative"
         >
-          <AnimeLoad />
+          {chat?.length === 0 || (chat === undefined && <AnimeLoad />)}
           <div className="flex flex-col  overflow-y-scroll  h-[82vh]">
             {(chat?.length as number) > 0 &&
               chat != undefined &&
