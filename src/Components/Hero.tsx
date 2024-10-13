@@ -8,7 +8,7 @@ const Hero = () => {
   const link = useNavigate();
   return (
     <div
-      className="w-full md:h-[90vh] flex justify-center items-center"
+      className="w-full md:h-[90vh] flex justify-center items-center h-screen"
       data-theme="dark"
     >
       <div className="w-[60%] flex flex-col items-center justify-center">
