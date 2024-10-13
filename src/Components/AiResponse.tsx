@@ -1,4 +1,4 @@
-import { ArrowUp, CookingPot, Copy, Youtube } from "lucide-react";
+import { ArrowUp, CookingPot, Copy, Loader, Youtube } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import getResponse from "./utlis";
 import formatter from "./formatter";
@@ -16,6 +16,7 @@ const AiResponse = ({
 }) => {
   const copyRef = useRef<HTMLDivElement>(null);
   const [preparing, setPreparing] = useState(true);
+  const [ytLoad, setytLoad] = useState(false);
   const respDiv = useRef<HTMLDivElement>(null);
   const [data, setData] = useState<string>();
   useEffect(() => {
@@ -71,16 +72,27 @@ const AiResponse = ({
                   {" "}
                   <Copy />
                 </button>
-                <a
+                <button
                   className="btn"
-                  href={`https://www.youtube.com/results?search_query=${query.replace(
-                    "&",
-                    "and"
-                  )}`}
-                  target="_blank"
+                  onClick={() => {
+                    setytLoad(true);
+                    toast.loading("Redirecting to Youtube ", {
+                      duration: 1300,
+                    });
+                    setTimeout(() => {
+                      window.open(
+                        `https://www.youtube.com/results?search_query=${query.replace(
+                          "&",
+                          "and"
+                        )}`,
+                        "_blank"
+                      );
+                      setytLoad(false);
+                    }, 1500);
+                  }}
                 >
-                  <Youtube />
-                </a>
+                  {ytLoad ? <Loader className="animate-spin" /> : <Youtube />}
+                </button>
               </div>
             </>
           ) : (
