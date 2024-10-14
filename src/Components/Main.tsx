@@ -56,7 +56,7 @@ const Main = ({ Online }: { Online: boolean }) => {
             <input
               type="text"
               required
-              placeholder="vegetables"
+              placeholder="Ingredients"
               value={vegetables}
               className="input input-bordered w-full max-w-[80%] bg-base-100"
               onChange={(e) => {
