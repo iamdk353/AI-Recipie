@@ -1,4 +1,9 @@
+"use client";
+import { useUser } from "@clerk/nextjs";
+
 const page = () => {
-  return <div>profile</div>;
+  const { user } = useUser();
+  console.log(user?.fullName);
+  return <div></div>;
 };
 export default page;

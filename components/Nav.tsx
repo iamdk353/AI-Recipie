@@ -57,9 +57,7 @@ const Nav = () => {
           <MenubarContent>
             {NavIterators.map((i, id) => {
               return i == "logout" ? (
-                <Button key={id}>
-                  <SignOutButton>Logout</SignOutButton>
-                </Button>
+                <SignOutButton key={id}>Logout</SignOutButton>
               ) : (
                 <Link key={id} href={i}>
                   <MenubarItem className="capitalize">{i}</MenubarItem>
