@@ -10,6 +10,7 @@
     "sc-add": "npx shadcn@latest add "
   },
   "dependencies": {
+    "@clerk/nextjs": "^6.3.4",
     "@radix-ui/react-menubar": "^1.1.2",
     "@radix-ui/react-navigation-menu": "^1.2.1",
     "@radix-ui/react-slot": "^1.1.0",

@@ -10,12 +10,14 @@ import {
   MenubarShortcut,
   MenubarTrigger,
 } from "./ui/menubar";
-import { Menu } from "lucide-react";
+import { ChevronRight, Menu } from "lucide-react";
 import { NavIterators } from "./iterators";
 import Link from "next/link";
+import { SignOutButton, useUser } from "@clerk/nextjs";
 
 const Nav = () => {
   const [activeTab, setActiveTab] = useState(-1);
+  const { isSignedIn, isLoaded, user } = useUser();
   return (
     <Menubar className="h-[4rem] md:px-10 px-4">
       <Link href={"/"}>
@@ -30,46 +32,23 @@ const Nav = () => {
         </Button>
       </Link>
       <div className="flex-1"></div>
-      <div className="space-x-6 hidden md:flex">
-        {NavIterators.map((i, id) => {
-          return (
-            <Tab
-              activeTab={activeTab}
-              setActiveTab={setActiveTab}
-              id={id}
-              text={i}
-              key={id}
-            />
-          );
-        })}
-        {/* <Button
-          variant={activeTab !== 1 ? "ghost" : "default"}
-          className="text-xl"
-          onClick={() => {
-            setActiveTab(1);
-          }}
-        >
-          Home
-        </Button>
-        <Button
-          variant={activeTab !== 2 ? "ghost" : "default"}
-          className="text-xl"
-          onClick={() => {
-            setActiveTab(2);
-          }}
-        >
-          Chat-bot
-        </Button>
-        <Button
-          variant={activeTab !== 3 ? "ghost" : "default"}
-          className="text-xl"
-          onClick={() => {
-            setActiveTab(3);
-          }}
-        >
-          Profile
-        </Button> */}
-      </div>
+      {isSignedIn && (
+        <div className="space-x-6 hidden md:flex">
+          {NavIterators.map((i, id) => {
+            return i == "logout" ? (
+              <SignOutButton key={id}>Logout</SignOutButton>
+            ) : (
+              <Tab
+                activeTab={activeTab}
+                setActiveTab={setActiveTab}
+                id={id}
+                text={i}
+                key={id}
+              />
+            );
+          })}
+        </div>
+      )}
       <div className="md:hidden">
         <MenubarMenu>
           <MenubarTrigger>
@@ -77,9 +56,13 @@ const Nav = () => {
           </MenubarTrigger>
           <MenubarContent>
             {NavIterators.map((i, id) => {
-              return (
+              return i == "logout" ? (
+                <Button key={id}>
+                  <SignOutButton>Logout</SignOutButton>
+                </Button>
+              ) : (
                 <Link key={id} href={i}>
-                  <MenubarItem>{i}</MenubarItem>
+                  <MenubarItem className="capitalize">{i}</MenubarItem>
                   <MenubarSeparator />
                 </Link>
               );
@@ -87,6 +70,14 @@ const Nav = () => {
           </MenubarContent>
         </MenubarMenu>
       </div>
+      {!isSignedIn && (
+        <Link href={"sign-up"}>
+          <Button className="group  justify-center hidden md:flex">
+            SIGN UP{" "}
+            <ChevronRight className="transition-transform duration-300 group-hover:translate-x-1" />
+          </Button>
+        </Link>
+      )}
     </Menubar>
   );
 };

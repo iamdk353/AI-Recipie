@@ -1,4 +1,4 @@
-export const NavIterators = ["Chat-Bot", "profile"];
+export const NavIterators = ["Chat-Bot", "profile", "logout"];
 export const ImageDes = [
   "classic meal that embraces time-honored cooking techniques, reflecting the essence of cultural customs, using local, often simple ingredients.",
   "The foundation of many diets, grains like rice and wheat provide essential carbohydrates and are served as side dishes or incorporated into main courses.",
