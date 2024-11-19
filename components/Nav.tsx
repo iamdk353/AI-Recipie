@@ -14,10 +14,10 @@ import { ChevronRight, Menu } from "lucide-react";
 import { NavIterators } from "./iterators";
 import Link from "next/link";
 import { SignOutButton, useUser } from "@clerk/nextjs";
-
+import { localUse } from "@/components/localUser";
 const Nav = () => {
   const [activeTab, setActiveTab] = useState(-1);
-  const { isSignedIn, isLoaded, user } = useUser();
+  const { isSignedIn, isLoaded, user } = localUse();
   return (
     <Menubar className="h-[4rem] md:px-10 px-4">
       <Link href={"/"}>

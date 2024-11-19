@@ -1,0 +1,65 @@
+import { useState, ChangeEvent } from "react";
+import { Button } from "@/components/ui/button";
+import {
+  Card,
+  CardHeader,
+  CardTitle,
+  CardDescription,
+  CardContent,
+  CardFooter,
+} from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
+import { User, Mail, Upload } from "lucide-react";
+import { useUser } from "@clerk/nextjs";
+import { localUse } from "./localUser";
+
+export default function UserProfileForm() {
+  const { user } = localUse();
+  const [email, setEmail] = useState("");
+  console.log();
+
+  return (
+    <div className="min-h-screen bg-zinc-100 flex items-center justify-center p-4">
+      <Card className="w-full max-w-md bg-white shadow-xl">
+        <CardHeader className="bg-zinc-800 text-white">
+          <CardTitle className="text-2xl">{user.fullName}</CardTitle>
+        </CardHeader>
+        <form>
+          <CardContent className="mt-6 space-y-6">
+            <div className="space-y-2">
+              <div className="flex items-center space-x-4 justify-center">
+                <Avatar className="w-20 h-20">
+                  <AvatarImage src={user?.imageUrl} alt="Profile photo" />
+                  <AvatarFallback className="bg-zinc-300 text-zinc-600">
+                    {user?.fullName
+                      ? user?.fullName.charAt(0).toUpperCase()
+                      : "U"}
+                  </AvatarFallback>
+                </Avatar>
+              </div>
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="email" className="flex items-center space-x-2">
+                <Mail className="size-7" />
+                <span className="text-xl">Email</span>
+              </Label>
+              <Input
+                id="email"
+                type="email"
+                inert
+                defaultValue={user.emailAddresses[0].emailAddress}
+                placeholder="Enter your email"
+                className="bg-zinc-100"
+                required
+              />
+            </div>
+          </CardContent>
+          <CardFooter></CardFooter>
+        </form>
+      </Card>
+    </div>
+  );
+}
