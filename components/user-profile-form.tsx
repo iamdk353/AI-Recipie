@@ -11,17 +11,16 @@ import { Label } from "@/components/ui/label";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { Mail } from "lucide-react";
 import { useUser } from "@clerk/nextjs";
-import { localUse } from "./localUser";
 
 export default function UserProfileForm() {
-  const { user } = localUse();
+  const { user } = useUser();
   // use useUser
   const [email, setEmail] = useState("");
   return (
     <div className="min-h-screen bg-zinc-100 flex items-center justify-center p-4">
       <Card className="w-full max-w-md bg-white shadow-xl">
         <CardHeader className="bg-zinc-800 text-white">
-          <CardTitle className="text-2xl">{user.fullName}</CardTitle>
+          <CardTitle className="text-2xl">{user?.fullName}</CardTitle>
         </CardHeader>
         <form>
           <CardContent className="mt-6 space-y-6">
@@ -46,7 +45,7 @@ export default function UserProfileForm() {
                 id="email"
                 type="email"
                 inert
-                defaultValue={user.emailAddresses[0].emailAddress}
+                defaultValue={user?.emailAddresses[0].emailAddress}
                 placeholder="Enter your email"
                 className="bg-zinc-100"
                 required

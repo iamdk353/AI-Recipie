@@ -1,5 +1,4 @@
 "use client";
-import { localUse } from "@/components/localUser";
 import FoodPreferenceForm from "@/components/food-preference-form";
 import UserProfileForm from "@/components/user-profile-form";
 import { useState } from "react";
@@ -7,8 +6,9 @@ import FoodPrefSection from "./foodPrefSection";
 import { Edit, ScanEye } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { useUser } from "@clerk/nextjs";
 const page = () => {
-  const { user, isLoaded } = localUse();
+  const { user, isLoaded } = useUser();
   const [edit, setEdit] = useState(true);
   // console.log(user);
   return (
@@ -17,7 +17,7 @@ const page = () => {
       {!edit && <FoodPreferenceForm setEdit={setEdit} />}
       {edit && (
         <FoodPrefSection
-          id={user.emailAddresses[0].emailAddress}
+          id={user?.emailAddresses[0]?.emailAddress as string}
           setEdit={setEdit}
         />
       )}

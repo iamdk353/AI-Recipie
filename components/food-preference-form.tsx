@@ -15,9 +15,9 @@ import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Slider } from "@/components/ui/slider";
-import { localUse } from "./localUser";
 import axios from "axios";
 import { toast } from "sonner";
+import { useUser } from "@clerk/nextjs";
 export default function FoodPreferenceForm({
   setEdit,
 }: {
@@ -29,7 +29,7 @@ export default function FoodPreferenceForm({
   const [sweetness, setSweetness] = useState([3]);
   const [excludeItems, setExcludeItems] = useState<string[]>([]);
   const [otherExclusions, setOtherExclusions] = useState("");
-  const { user } = localUse();
+  const { user } = useUser();
   const cuisines = [
     "Indian",
     "Chinese",
@@ -76,12 +76,12 @@ export default function FoodPreferenceForm({
       sweetness: sweetness[0],
       excludeItems,
       otherExclusions,
-      createdBy: user.emailAddresses[0].emailAddress,
+      createdBy: user?.emailAddresses[0].emailAddress,
     };
     console.log("Form submitted with data:", formData);
     try {
       const data = await axios.post(
-        `api/create-pref/${user.emailAddresses[0].emailAddress}`,
+        `api/create-pref/${user?.emailAddresses[0].emailAddress}`,
         formData
       );
       console.log(data);
