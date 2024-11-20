@@ -1,25 +1,22 @@
-import { useState, ChangeEvent } from "react";
-import { Button } from "@/components/ui/button";
+import { useState, ChangeEvent, useEffect } from "react";
 import {
   Card,
   CardHeader,
   CardTitle,
-  CardDescription,
   CardContent,
   CardFooter,
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
-import { User, Mail, Upload } from "lucide-react";
+import { Mail } from "lucide-react";
 import { useUser } from "@clerk/nextjs";
 import { localUse } from "./localUser";
 
 export default function UserProfileForm() {
   const { user } = localUse();
+  // use useUser
   const [email, setEmail] = useState("");
-  console.log();
-
   return (
     <div className="min-h-screen bg-zinc-100 flex items-center justify-center p-4">
       <Card className="w-full max-w-md bg-white shadow-xl">
@@ -40,7 +37,6 @@ export default function UserProfileForm() {
                 </Avatar>
               </div>
             </div>
-
             <div className="space-y-2">
               <Label htmlFor="email" className="flex items-center space-x-2">
                 <Mail className="size-7" />
@@ -57,7 +53,6 @@ export default function UserProfileForm() {
               />
             </div>
           </CardContent>
-          <CardFooter></CardFooter>
         </form>
       </Card>
     </div>

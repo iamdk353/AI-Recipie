@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, FormEvent } from "react";
+import { useState, FormEvent, Dispatch, SetStateAction } from "react";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -15,15 +15,21 @@ import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Slider } from "@/components/ui/slider";
-
-export default function FoodPreferenceForm() {
+import { localUse } from "./localUser";
+import axios from "axios";
+import { toast } from "sonner";
+export default function FoodPreferenceForm({
+  setEdit,
+}: {
+  setEdit: Dispatch<SetStateAction<boolean>>;
+}) {
   const [dietaryPreference, setDietaryPreference] = useState("veg");
   const [cuisinePreferences, setCuisinePreferences] = useState<string[]>([]);
   const [spiciness, setSpiciness] = useState([3]);
   const [sweetness, setSweetness] = useState([3]);
   const [excludeItems, setExcludeItems] = useState<string[]>([]);
   const [otherExclusions, setOtherExclusions] = useState("");
-
+  const { user } = localUse();
   const cuisines = [
     "Indian",
     "Chinese",
@@ -61,7 +67,7 @@ export default function FoodPreferenceForm() {
     );
   };
 
-  const handleSubmit = (e: FormEvent) => {
+  const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
     const formData = {
       dietaryPreference,
@@ -70,8 +76,20 @@ export default function FoodPreferenceForm() {
       sweetness: sweetness[0],
       excludeItems,
       otherExclusions,
+      createdBy: user.emailAddresses[0].emailAddress,
     };
     console.log("Form submitted with data:", formData);
+    try {
+      const data = await axios.post(
+        `api/create-pref/${user.emailAddresses[0].emailAddress}`,
+        formData
+      );
+      console.log(data);
+      toast.success("updated");
+      setEdit(true);
+    } catch (error) {
+      toast.error("error in fething");
+    }
   };
 
   return (
