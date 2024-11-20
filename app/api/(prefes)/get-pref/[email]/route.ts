@@ -16,7 +16,14 @@ export async function GET(
     if (data) {
       return NextResponse.json(data);
     } else {
-      return NextResponse.json({ msg: "user not found" });
+      return NextResponse.json({
+        dietaryPreference: "",
+        cuisinePreferences: [],
+        spiciness: 0,
+        sweetness: 0,
+        excludeItems: [],
+        otherExclusions: "",
+      });
     }
   } catch (error) {
     throw new Error();
