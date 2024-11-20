@@ -35,7 +35,9 @@ const Nav = () => {
         <div className="space-x-6 hidden md:flex">
           {NavIterators.map((i, id) => {
             return i == "logout" ? (
-              <SignOutButton key={id}>Logout</SignOutButton>
+              <SignOutButton key={id} redirectUrl="/">
+                Logout
+              </SignOutButton>
             ) : (
               <Tab
                 activeTab={activeTab}
