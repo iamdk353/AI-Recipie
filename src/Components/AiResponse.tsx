@@ -25,7 +25,7 @@ const AiResponse = ({
     }
     async function getData() {
       const resp = await getResponse(query, cookMode);
-      setData(formatter(resp));
+      setData(formatter(resp as string));
       setPreparing(false);
     }
     getData();

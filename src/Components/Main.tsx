@@ -38,11 +38,12 @@ const Main = ({ Online }: { Online: boolean }) => {
 
             try {
               const resp = await getResponse(prompt as string);
-              setIdeas(JSON.parse(resp));
+              setIdeas(JSON.parse(resp as string));
               setIdeaLoad(false);
               setSubmit(false);
               toast.success("Ideas Generated");
             } catch (error) {
+              console.log(error);
               toast.error("provide correct query");
               setIdeaLoad(false);
               setIdeas(undefined);
