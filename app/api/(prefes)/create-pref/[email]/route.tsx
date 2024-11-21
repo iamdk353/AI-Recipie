@@ -7,7 +7,6 @@ export async function POST(
   { params }: { params: { email: string } }
 ) {
   const { email } = await params;
-  console.log(email);
   try {
     const collection = await getCollection();
 

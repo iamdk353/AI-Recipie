@@ -18,17 +18,22 @@ import { Slider } from "@/components/ui/slider";
 import axios from "axios";
 import { toast } from "sonner";
 import { useUser } from "@clerk/nextjs";
+import { Switch } from "./ui/switch";
+import { Loader } from "lucide-react";
 export default function FoodPreferenceForm({
   setEdit,
 }: {
   setEdit: Dispatch<SetStateAction<boolean>>;
 }) {
-  const [dietaryPreference, setDietaryPreference] = useState("veg");
+  const [dietaryPreference, setDietaryPreference] = useState("");
   const [cuisinePreferences, setCuisinePreferences] = useState<string[]>([]);
   const [spiciness, setSpiciness] = useState([3]);
   const [sweetness, setSweetness] = useState([3]);
   const [excludeItems, setExcludeItems] = useState<string[]>([]);
+  const [healthCondition, setHealthCondition] = useState<string[]>([]);
   const [otherExclusions, setOtherExclusions] = useState("");
+
+  const [load, setLoad] = useState(false);
   const { user } = useUser();
   const cuisines = [
     "Indian",
@@ -50,7 +55,7 @@ export default function FoodPreferenceForm({
     "Fish",
     "Shellfish",
   ];
-
+  const condition = ["Diabetic", "Blood Pressure", "Sinusitis", "Cardiac"];
   const handleCuisineChange = (cuisine: string) => {
     setCuisinePreferences((prev) =>
       prev.includes(cuisine)
@@ -61,6 +66,13 @@ export default function FoodPreferenceForm({
 
   const handleExcludeChange = (item: string) => {
     setExcludeItems((prev) =>
+      prev.includes(item)
+        ? prev.filter((excludeItem) => excludeItem !== item)
+        : [...prev, item]
+    );
+  };
+  const handleHealthChange = (item: string) => {
+    setHealthCondition((prev) =>
       prev.includes(item)
         ? prev.filter((excludeItem) => excludeItem !== item)
         : [...prev, item]
@@ -77,15 +89,16 @@ export default function FoodPreferenceForm({
       excludeItems,
       otherExclusions,
       createdBy: user?.emailAddresses[0].emailAddress,
+      healthCondition,
     };
-    console.log("Form submitted with data:", formData);
     try {
+      setLoad(true);
       const data = await axios.post(
         `api/create-pref/${user?.emailAddresses[0].emailAddress}`,
         formData
       );
-      console.log(data);
       toast.success("updated");
+      setLoad(false);
       setEdit(true);
     } catch (error) {
       toast.error("error in fething");
@@ -235,13 +248,39 @@ export default function FoodPreferenceForm({
                 onChange={(e) => setOtherExclusions(e.target.value)}
               />
             </div>
+            <div className="space-y-7">
+              <Label className="text-2xl ">Health condition</Label>
+              <div className="grid grid-cols-2 gap-2">
+                {condition.map((i) => (
+                  <div key={i} className="flex items-center space-x-2">
+                    <Switch
+                      id={`i-${i.toLowerCase()}`}
+                      className=""
+                      checked={healthCondition.includes(i)}
+                      onCheckedChange={() => handleHealthChange(i)}
+                    />
+                    <Label
+                      htmlFor={`i-${i.toLowerCase()}`}
+                      className="text-sm md:text-[1.1rem]"
+                    >
+                      {i}
+                    </Label>
+                  </div>
+                ))}
+              </div>
+            </div>
           </CardContent>
           <CardFooter>
             <Button
               type="submit"
               className="w-full bg-zinc-800 hover:bg-zinc-700"
+              disabled={
+                !(dietaryPreference !== "" && cuisinePreferences.length > 0) ||
+                load
+              }
             >
-              Submit Preferences
+              {!load && "Submit Preferences"}
+              {load && <Loader className="animate-spin" />}
             </Button>
           </CardFooter>
         </form>

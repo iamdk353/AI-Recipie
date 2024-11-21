@@ -77,13 +77,17 @@ export default function Home() {
           {features.map((feature, index) => (
             <div
               key={index}
-              className="bg-white rounded-2xl p-6 shadow-lg hover:shadow-xl transition-all duration-300 text-center"
+              className="bg-white rounded-2xl p-6 shadow-lg hover:shadow-xl transition-all duration-300 text-center group cursor-default"
             >
-              <div className="flex justify-center mb-6">{feature.icon}</div>
-              <h3 className="text-2xl font-bold text-zinc-900 mb-4">
+              <div className="flex justify-center mb-6 group-hover:scale-125 transition-all">
+                {feature.icon}
+              </div>
+              <h3 className="text-2xl font-bold text-zinc-900 mb-4 group-hover:-translate-y-3 transition-all">
                 {feature.title}
               </h3>
-              <p className="text-zinc-600">{feature.description}</p>
+              <p className="text-zinc-600 group-hover:text-zinc-900 transition-all">
+                {feature.description}
+              </p>
             </div>
           ))}
         </div>

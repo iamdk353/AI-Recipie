@@ -6,7 +6,6 @@ export async function GET(
   { params }: { params: { email: string } }
 ) {
   const { email } = await params;
-  console.log(email);
   try {
     const client = await clientPromise;
     const db = client?.db("flavourbot");
@@ -22,6 +21,7 @@ export async function GET(
         spiciness: 0,
         sweetness: 0,
         excludeItems: [],
+        healthCondition: [],
         otherExclusions: "",
       });
     }

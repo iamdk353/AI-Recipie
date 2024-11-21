@@ -6,7 +6,6 @@ export const GET = async () => {
     const db = client?.db("flavourbot");
 
     const data = await db?.collection("flavourbot").find({}).toArray();
-    console.log(data);
     if (data) {
       return new NextResponse(JSON.stringify(data));
     }

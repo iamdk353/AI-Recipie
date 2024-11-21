@@ -4,7 +4,21 @@ import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Slider } from "@/components/ui/slider";
-import { ChefHat, Flame, Candy, Ban } from "lucide-react";
+import {
+  ChefHat,
+  Flame,
+  Candy,
+  Ban,
+  Edit,
+  Pen,
+  HeartPulse,
+  ShieldEllipsis,
+  Shield,
+  Plus,
+  ShieldXIcon,
+  ShieldCheckIcon,
+  HeartHandshakeIcon,
+} from "lucide-react";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Button } from "@/components/ui/button";
 
@@ -15,6 +29,7 @@ interface Preference {
   spiciness: number;
   sweetness: number;
   excludeItems: string[];
+  healthCondition: string[];
   otherExclusions: string;
   createdBy: string;
 }
@@ -41,12 +56,10 @@ export default function FoodPrefSection({
 
         const result = await resp.json();
         if ((result.msg = "user not found")) {
-          console.log("user is new");
           setNewUser(true);
         }
         setNewUser(false);
         setData(result);
-        console.log(result);
       } catch (err) {
         setError(false);
       } finally {
@@ -63,7 +76,7 @@ export default function FoodPrefSection({
   return (
     <>
       {!newUser && (
-        <Card className="w-full max-w-md overflow-hidden bg-gradient-to-br from-zinc-800 to-zinc-900 text-zinc-100 md:h-[70%] mx-auto">
+        <Card className="w-full max-w-md overflow-hidden bg-gradient-to-br from-zinc-800 to-zinc-900 text-zinc-100 md:h-[85%] mx-auto">
           <CardHeader className="bg-gradient-to-r from-zinc-700 to-zinc-800 pb-4">
             <CardTitle className="text-2xl font-bold text-zinc-100">
               Created by: {data?.createdBy}
@@ -163,10 +176,32 @@ export default function FoodPrefSection({
                   )}
                 </div>
               </div>
+              <div>
+                <h3 className="flex items-center text-lg font-semibold mb-2">
+                  <HeartHandshakeIcon className="w-5 h-5 mr-2" />
+                  Health Condition
+                </h3>
+                <div className="flex flex-wrap gap-2">
+                  {(data?.healthCondition.length as number) > 0 ? (
+                    <div>
+                      {data?.healthCondition.map((item, id) => (
+                        <div
+                          className="p-4 bg-zinc-800 rounded-md relative group cursor-default"
+                          key={id}
+                        >
+                          <ShieldCheckIcon className="size-4 absolute top-0 left-0 transition-transform duration-300 group-hover:scale-125 group-hover:opacity-100 fill-green-900 opacity-0" />
+                          {item}
+                        </div>
+                      ))}
+                    </div>
+                  ) : (
+                    <p className="text-zinc-400">YAY you are Healthy ..!!</p>
+                  )}
+                </div>
+              </div>
               <Button
-                onClick={() => {
-                  setEdit(false);
-                }}
+                onClick={() => setEdit(false)}
+                className="group relative flex items-center justify-center"
               >
                 Edit
               </Button>
