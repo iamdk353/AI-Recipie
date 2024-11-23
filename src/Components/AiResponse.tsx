@@ -46,53 +46,57 @@ const AiResponse = ({
                 ref={copyRef}
               ></motion.div>
               <div>
-                <button
-                  className="m-5"
-                  type="button"
-                  onClick={() => {
-                    const getText = () => {
-                      if (copyRef.current) {
-                        return (
-                          (copyRef.current.innerText as string) ||
-                          (copyRef.current.textContent as string)
-                        );
-                      }
-                      return "";
-                    };
-                    navigator.clipboard
-                      .writeText(getText())
-                      .then(() => {
-                        toast.success("Recipie copied to clipboard!");
-                      })
-                      .catch((err) => {
-                        toast.error("Failed to copy text: ", err);
+                <div className="tooltip tooltip-left" data-tip="Copy text">
+                  <button
+                    className="m-5"
+                    type="button"
+                    onClick={() => {
+                      const getText = () => {
+                        if (copyRef.current) {
+                          return (
+                            (copyRef.current.innerText as string) ||
+                            (copyRef.current.textContent as string)
+                          );
+                        }
+                        return "";
+                      };
+                      navigator.clipboard
+                        .writeText(getText())
+                        .then(() => {
+                          toast.success("Recipie copied to clipboard!");
+                        })
+                        .catch((err) => {
+                          toast.error("Failed to copy text: ", err);
+                        });
+                    }}
+                  >
+                    {" "}
+                    <Copy />
+                  </button>
+                </div>
+                <div className="tooltip tooltip-right" data-tip="Watch a video">
+                  <button
+                    className="btn"
+                    onClick={() => {
+                      setytLoad(true);
+                      toast.loading("Redirecting to Youtube ", {
+                        duration: 1300,
                       });
-                  }}
-                >
-                  {" "}
-                  <Copy />
-                </button>
-                <button
-                  className="btn"
-                  onClick={() => {
-                    setytLoad(true);
-                    toast.loading("Redirecting to Youtube ", {
-                      duration: 1300,
-                    });
-                    setTimeout(() => {
-                      window.open(
-                        `https://www.youtube.com/results?search_query=${query.replace(
-                          "&",
-                          "and"
-                        )}`,
-                        "_blank"
-                      );
-                      setytLoad(false);
-                    }, 1500);
-                  }}
-                >
-                  {ytLoad ? <Loader className="animate-spin" /> : <Youtube />}
-                </button>
+                      setTimeout(() => {
+                        window.open(
+                          `https://www.youtube.com/results?search_query=${query.replace(
+                            "&",
+                            "and"
+                          )}`,
+                          "_blank"
+                        );
+                        setytLoad(false);
+                      }, 1500);
+                    }}
+                  >
+                    {ytLoad ? <Loader className="animate-spin" /> : <Youtube />}
+                  </button>
+                </div>
               </div>
             </>
           ) : (

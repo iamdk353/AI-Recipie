@@ -69,6 +69,7 @@ const Main = ({ Online }: { Online: boolean }) => {
                 }
               }}
             />
+
             <button
               className="btn btn-primary"
               onClick={() => {
@@ -95,6 +96,11 @@ const Main = ({ Online }: { Online: boolean }) => {
               )}
             </button>
           </div>
+          {vegetables && !(vegetables.split(",").length > 3) && (
+            <span className="text-sm mt-2">
+              {vegetables.split(",").length}/3
+            </span>
+          )}
           <div
             className={
               vegetables.split(",").length < 3
