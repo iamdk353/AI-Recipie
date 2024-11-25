@@ -13,7 +13,8 @@ export async function GET(
       ?.collection("flavourbot")
       .findOne({ createdBy: email });
     if (data) {
-      return NextResponse.json(data);
+      const { _id, createdBy, ...filteredData } = data;
+      return NextResponse.json(filteredData);
     } else {
       return NextResponse.json({
         dietaryPreference: "",
