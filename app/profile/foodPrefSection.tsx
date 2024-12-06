@@ -18,6 +18,7 @@ import {
   ShieldXIcon,
   ShieldCheckIcon,
   HeartHandshakeIcon,
+  Loader,
 } from "lucide-react";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Button } from "@/components/ui/button";
@@ -70,7 +71,12 @@ export default function FoodPrefSection({
     fetchData();
   }, [id]);
 
-  if (loading) return <Skeleton className="size-[30rem]  mx-auto" />;
+  if (loading)
+    return (
+      <Skeleton className="size-[30rem]  mx-auto flex justify-center items-center">
+        <Loader className="animate-spin" />
+      </Skeleton>
+    );
   if (error) return <p>Error fetching data</p>;
 
   return (
@@ -181,9 +187,9 @@ export default function FoodPrefSection({
                   <HeartHandshakeIcon className="w-5 h-5 mr-2" />
                   Health Condition
                 </h3>
-                <div className="flex flex-wrap gap-2">
+                <div className="">
                   {(data?.healthCondition.length as number) > 0 ? (
-                    <div>
+                    <div className="flex flex-wrap gap-2">
                       {data?.healthCondition.map((item, id) => (
                         <div
                           className="p-4 bg-zinc-800 rounded-md relative group cursor-default"

@@ -135,19 +135,6 @@ export default function FoodPreferenceForm({
                 <div className="flex items-center space-x-2">
                   <RadioGroupItem
                     className="size-4 md:size-6"
-                    value="non-vegetarian"
-                    id="non-vegetarian"
-                  />
-                  <Label
-                    className="text-sm md:text-xl"
-                    htmlFor="non-vegetarian"
-                  >
-                    Non-Vegetarian
-                  </Label>
-                </div>
-                <div className="flex items-center space-x-2">
-                  <RadioGroupItem
-                    className="size-4 md:size-6"
                     value="both"
                     id="both"
                   />

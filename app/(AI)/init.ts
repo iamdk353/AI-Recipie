@@ -8,7 +8,7 @@ class llm {
     this.model = new ChatGroq({
       model: "llama-3.1-8b-instant",
       temperature: 0.6,
-      apiKey: process.env.GROQ_KEY,
+      apiKey: process.env.NEXT_PUBLIC_GROQ_API_KEY,
     });
   }
   async getFoodList(email: string) {
@@ -39,7 +39,7 @@ class llm {
   }
   async getCurrentUser(email: string) {
     try {
-      const data = await fetch(`${process.env.BASE_URL}api/get-pref/${email}`);
+      const data = await fetch(`http://localhost:3000/api/get-pref/${email}`);
       return (await data.json()) as Pref;
     } catch (error) {
       console.log(null);
@@ -60,7 +60,7 @@ class llm {
 const llmObj = new llm();
 export default llmObj;
 
-interface Pref {
+export interface Pref {
   dietaryPreference: string;
   cuisinePreferences: string[];
   spiciness: number;
@@ -70,7 +70,7 @@ interface Pref {
   healthCondition: string[];
 }
 
-interface opFoodlistPref {
+export interface opFoodlistPref {
   foodname: string;
   cusine: string;
   sweet: string;
